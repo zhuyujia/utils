@@ -71,13 +71,13 @@
 		/**
 		 * 改变文本字体大小
 		 * @param  {Object} opts 参数集合
-		 * range：		  字体大小增加幅度
-		 * min：		  字体最小值
-		 * max：		  字体最大值
-		 * disabledClass：禁用样式名
-		 * btnLarge：	  增大字体按钮
-		 * btnSmall：	  减小字体按钮
-		 * target：		  字体改变的容器
+		 * range：		字体大小增加幅度
+		 * min：		字体最小值
+		 * max：		字体最大值
+		 * disabledClass：	禁用样式名
+		 * btnLarge：	  	增大字体按钮
+		 * btnSmall：	  	减小字体按钮
+		 * target：		字体改变的容器
 		 */
 		fontSizeChange: function(opts){
 			var oTarget = document.getElementById(opts.target),
