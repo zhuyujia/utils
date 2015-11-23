@@ -7,7 +7,6 @@
 		 * 读取 cookie：Utils.cookie('name');
 		 * 写入 cookie：Utils.cookie('name', 'zhuyujia'); 或者 Utils.cookie('age', 28, {expires: 1});
 		 * 删除 cookie：Utils.cookie('name', null);
-		 * 
 		 * @param  {String} name  读取/写入/删除 cookie 的名称
 		 * @param  {String} value 需要设置 cookie 的值
 		 * @param  {Object} opts  其他参数，有效期 expires 单位小时；路径 path，域名 domain，安全性 secure
