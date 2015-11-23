@@ -49,7 +49,7 @@
 		 */
 		addFavorite: function(obj, opts){
 			var _t, _u;
-			if(typeof opts != 'object'){
+			if(typeof opts !== 'object'){
 				_t = document.title;
 				_u = location.href;
 			}else{
@@ -60,9 +60,9 @@
 				window.external.addFavorite(_u, _t);
 			}catch(e){
 				if(window.sidebar){
-				    obj.href = _u;
+				    obj.href  = _u;
 				    obj.title = _t;
-				    obj.rel = 'sidebar';
+				    obj.rel   = 'sidebar';
 				}else{
 				    alert('抱歉，您所使用的浏览器无法完成此操作。\n\n请使用 Ctrl + D 将本页加入收藏夹！');
 				}
@@ -71,24 +71,24 @@
 		/**
 		 * 改变文本字体大小
 		 * @param  {Object} opts 参数集合
-		 * range：		字体大小增加幅度
-		 * min：		字体最小值
-		 * max：		字体最大值
+		 * range：			字体大小增加幅度
+		 * min：			字体最小值
+		 * max：			字体最大值
 		 * disabledClass：	禁用样式名
 		 * btnLarge：	  	增大字体按钮
 		 * btnSmall：	  	减小字体按钮
-		 * target：		字体改变的容器
+		 * target：			字体改变的容器
 		 */
 		fontSizeChange: function(opts){
-			var oTarget = document.getElementById(opts.target),
-				oBtnLarge = document.getElementById(opts.btnLarge),
-				oBtnSmall = document.getElementById(opts.btnSmall),
-				oTargetStyle = root.getComputedStyle ? root.getComputedStyle(oTarget, '') : oTarget.currentStyle,
-				iCurSize = parseInt(oTargetStyle.fontSize, 10),
-				iMin = opts.min || 12,
-				iMax = opts.max || 20,
+			var oTarget        = document.getElementById(opts.target),
+				oBtnLarge      = document.getElementById(opts.btnLarge),
+				oBtnSmall      = document.getElementById(opts.btnSmall),
+				oTargetStyle   = root.getComputedStyle ? root.getComputedStyle(oTarget, '') : oTarget.currentStyle,
+				iCurSize       = parseInt(oTargetStyle.fontSize, 10),
+				iMin           = opts.min || 12,
+				iMax           = opts.max || 20,
 				sDisabledClass = opts.disabledClass || 'disabled',
-				regExp = new RegExp('(\\s|^)' + sDisabledClass + '(\\s|$)');
+				regExp         = new RegExp('(\\s|^)' + sDisabledClass + '(\\s|$)');
 
 			function changeSize(oBtn, num){
 				if(regExp.test(oBtn.className)){
