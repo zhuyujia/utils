@@ -1,4 +1,4 @@
-;(function(root) {
+;(function(w) {
 	'use strict';
 
 	var Utils = {
@@ -42,7 +42,7 @@
 			}
 		},
 		/**
-		 * 添加到收藏夹
+		 * 添加到收藏夹，使用方法：Utils.addFavorite(obj, {'title': 'your_title', 'url': 'your_url'});
 		 * @param {Object} obj  指代上下文，一般用 this，如：<a href="javascript:;" onclick="Utils.addFavorite(this)">点击收藏</a>
 		 * @param {Object} opts 收藏夹的标题和链接，默认为当前页面的标题和链接 {title: 'your_title', url: 'your_url'}
 		 */
@@ -68,20 +68,20 @@
 			}
 		},
 		/**
-		 * 改变文本字体大小
-		 * @param  {Object} opts 参数集合
-		 * range：字体大小增加幅度
-		 * min：字体最小值
-		 * max：字体最大值
-		 * disabledClass：禁用样式名
-		 * btnLarge：增大字体按钮
-		 * btnSmall：减小字体按钮
-		 * target：字体改变的容器
+		 * 改变文本字体大小，使用方法：Utils.fontSizeChange({'range': 1, 'min': 14, 'max': 20, 'disabledClass': 'disabled', 'btnLargeId': 'large', 'btnSmallId': 'small', 'target': 'wrapper'});
+		 * @param  {Object} opts 参数集合，参数如下：
+		 * range：字体大小增加幅度，默认 1
+		 * min：字体最小值，默认 12
+		 * max：字体最大值，默认 20
+		 * disabledClass：禁用样式名，默认 'disabled'
+		 * btnLargeId：增大字体按钮的 id
+		 * btnSmallId：减小字体按钮的 id
+		 * target：字体改变的容器的 id
 		 */
 		fontSizeChange: function(opts) {
 			var oTarget = document.getElementById(opts.target),
-				oBtnLarge = document.getElementById(opts.btnLarge),
-				oBtnSmall = document.getElementById(opts.btnSmall),
+				oBtnLarge = document.getElementById(opts.btnLargeId),
+				oBtnSmall = document.getElementById(opts.btnSmallId),
 				oTargetStyle = root.getComputedStyle ? root.getComputedStyle(oTarget, '') : oTarget.currentStyle,
 				iCurSize = parseInt(oTargetStyle.fontSize, 10),
 				iMin = opts.min || 12,
@@ -89,13 +89,13 @@
 				sDisabledClass = opts.disabledClass || 'disabled',
 				regExp = new RegExp('(\\s|^)' + sDisabledClass + '(\\s|$)');
 
-			function changeSize(oBtn, num) {
+			function changeSize(oBtn, range) {
 				if (regExp.test(oBtn.className)) {
 					return false;
 				} else {
-					iCurSize += num;
+					iCurSize += range || 1;
 					oTarget.style.fontSize = iCurSize + 'px';
-					if (num < 0) {
+					if (range < 0) {
 						oBtnLarge.className = oBtnLarge.className.replace(regExp, ' ');
 						if (iCurSize <= iMin) {
 							oBtnSmall.className += ' ' + sDisabledClass;
@@ -110,14 +110,53 @@
 			}
 
 			oBtnLarge.onclick = function() {
-				changeSize(oBtnLarge, opts.num);
+				changeSize(oBtnLarge, opts.range);
 			};
 
 			oBtnSmall.onclick = function() {
-				changeSize(oBtnSmall, -opts.num);
+				changeSize(oBtnSmall, -opts.range);
 			};
+		},
+		/**
+		 * 输入框占位符提示语，支持 input 和 textarea，使用方法：Utils.placeholder('name', '请输入', 'tip');
+		 * @param  {[type]} id        文本输入框 id
+		 * @param  {[type]} msg       占位符提示语文字
+		 * @param  {[type]} className 占位符提示语样式名称，默认 tip-id，比如 id 为 name，那么样式名称为 'tip-name'
+		 */
+		placeholder: function(id, msg, className) {
+			var isPlaceholder = 'placeholder' in document.createElement('input'),
+				oTarget = document.getElementById(id),
+				oParent = oTarget.parentNode,
+				oLabel = document.createElement('label');
+
+			function dealPlaceholder(oTarget, oLabel) {
+				var deal = function() {
+					var val = oTarget.value;
+					if (val !== '') {
+						oLabel.style.display = 'none';
+					} else {
+						oLabel.style.display = 'block';
+					}
+				};
+
+				oTarget.oninput = deal;
+				oTarget.onpropertychange = deal;
+			}
+
+			if (isPlaceholder) {
+				oTarget.setAttribute('placeholder', msg);
+			} else {
+				oLabel.setAttribute('for', id);
+				oLabel.setAttribute('class', className || 'tip' + id);
+				oLabel.innerHTML = msg;
+				oParent.insertBefore(oLabel, oTarget);
+				if (oTarget.value !== '') {
+					oLabel.style.display = 'none';
+				}
+				dealPlaceholder(oTarget, oLabel);
+			}
 		}
 	};
 
-	root.Utils = Utils;
+	w.Utils = Utils;
 })(window);
