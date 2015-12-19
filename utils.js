@@ -4,9 +4,9 @@
 	var Utils = {
 		/**
 		 * 用于读取/写入/删除浏览器 cookie。使用方法：
-		 * 读取 cookie：Utils.cookie('name');
-		 * 写入 cookie：Utils.cookie('name', 'zhuyujia'); 或者 Utils.cookie('age', 28, {expires: 1});
-		 * 删除 cookie：Utils.cookie('name', null);
+		 * 读取：Utils.cookie('name');
+		 * 写入：Utils.cookie('name', 'zhuyujia'); 或者 Utils.cookie('age', 28, {expires: 1});
+		 * 删除：Utils.cookie('name', null);
 		 * @param  {String} name  读取/写入/删除 cookie 的名称
 		 * @param  {String} value 需要设置 cookie 的值
 		 * @param  {Object} opts  其他参数，有效期 expires 单位小时；路径 path，域名 domain，安全性 secure
@@ -43,7 +43,7 @@
 		},
 		/**
 		 * 添加到收藏夹，使用方法：Utils.addFavorite(obj, {'title': 'your_title', 'url': 'your_url'});
-		 * @param {Object} obj  指代上下文，一般用 this，如：<a href="javascript:;" onclick="Utils.addFavorite(this)">点击收藏</a>
+		 * @param {Object} obj  指代触发函数的上下文，一般用 this，如：<a href="javascript:;" onclick="Utils.addFavorite(this)">点击收藏</a>
 		 * @param {Object} opts 收藏夹的标题和链接，默认为当前页面的标题和链接 {title: 'your_title', url: 'your_url'}
 		 */
 		addFavorite: function(obj, opts) {
@@ -121,7 +121,7 @@
 		 * 输入框占位符提示语，支持 input 和 textarea，使用方法：Utils.placeholder('name', '请输入', 'tip');
 		 * @param  {String} id        文本输入框 id
 		 * @param  {String} msg       占位符提示语文字
-		 * @param  {String} className 占位符提示语样式名称，默认 tip-id，比如 id 为 name，那么样式名称为 'tip-name'
+		 * @param  {String} className 低版本浏览器占位符提示语样式名称，默认 tip-id，比如 id 为 name，那么样式名称为 'tip-name'
 		 */
 		placeholder: function(id, msg, className) {
 			var isPlaceholder = 'placeholder' in document.createElement('input'),
@@ -152,6 +152,29 @@
 					oLabel.style.display = 'none';
 				}
 				dealPlaceholder(oTarget, oLabel);
+			}
+		},
+		/**
+		 * 设置为首页，使用方法：<a href="javascript:;" onclick="Utils.setHome(this, window.location.href);">设为首页</a>
+		 * @param {Object} obj 指代触发函数的上下文，一般用 this
+		 * @param {String} url 设置为首页的地址
+		 */
+		setHome: function(obj, url){
+			try{
+				obj.style.behavior = 'url(#default#homepage)';
+				obj.setHomePage(url);
+			}catch(e){
+				if(window.netscape){
+					try{
+						netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+					}catch(error){
+						alert('抱歉，此操作被浏览器拒绝！\n\n请在浏览器地址栏输入“about:config”并回车\n\n然后将[signed.applets.codebase_principal_support]的值设置为true，双击即可。');
+					}
+					var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch);
+					prefs.setCharPref('browser.startup.homepage', url);
+				}else{
+					alert('抱歉，您所使用的浏览器无法完成此操作。\n\n您需要手动将【' + url + '】设置为首页。');
+				}
 			}
 		}
 	};
