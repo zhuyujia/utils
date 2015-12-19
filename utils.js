@@ -119,9 +119,9 @@
 		},
 		/**
 		 * 输入框占位符提示语，支持 input 和 textarea，使用方法：Utils.placeholder('name', '请输入', 'tip');
-		 * @param  {[type]} id        文本输入框 id
-		 * @param  {[type]} msg       占位符提示语文字
-		 * @param  {[type]} className 占位符提示语样式名称，默认 tip-id，比如 id 为 name，那么样式名称为 'tip-name'
+		 * @param  {String} id        文本输入框 id
+		 * @param  {String} msg       占位符提示语文字
+		 * @param  {String} className 占位符提示语样式名称，默认 tip-id，比如 id 为 name，那么样式名称为 'tip-name'
 		 */
 		placeholder: function(id, msg, className) {
 			var isPlaceholder = 'placeholder' in document.createElement('input'),
@@ -138,16 +138,14 @@
 						oLabel.style.display = 'block';
 					}
 				};
-
-				oTarget.oninput = deal;
-				oTarget.onpropertychange = deal;
+				oTarget.oninput = oTarget.onpropertychange = deal;
 			}
 
 			if (isPlaceholder) {
 				oTarget.setAttribute('placeholder', msg);
 			} else {
 				oLabel.setAttribute('for', id);
-				oLabel.setAttribute('class', className || 'tip' + id);
+				oLabel.setAttribute('class', className || 'tip-' + id);
 				oLabel.innerHTML = msg;
 				oParent.insertBefore(oLabel, oTarget);
 				if (oTarget.value !== '') {
