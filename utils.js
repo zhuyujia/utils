@@ -1,4 +1,5 @@
-;(function(w) {
+;
+(function(window) {
 	'use strict';
 
 	var Utils = {
@@ -50,10 +51,10 @@
 			var _t, _u;
 			if (typeof opts !== 'object') {
 				_t = document.title;
-				_u = location.href;
+				_u = window.location.href;
 			} else {
 				_t = opts.title || document.title;
-				_u = opts.url || location.href;
+				_u = opts.url || window.location.href;
 			}
 			try {
 				window.external.addFavorite(_u, _t);
@@ -118,30 +119,19 @@
 			};
 		},
 		/**
-		 * 输入框占位符提示语，支持 input 和 textarea，使用方法：Utils.placeholder('name', '请输入', 'tip');
+		 * 输入框占位符提示语，支持 input 和 textarea 标签，使用方法：Utils.placeholder('name', '请输入', 'tip'); 由于 placeholder 在 ie 浏览器中效果不理想，比如 ie6-9 不支持 placeholder，ie10 鼠标聚焦后文本消失，所以在 ie 浏览器中使用 label 标签模拟。
 		 * @param  {String} id        文本输入框 id
 		 * @param  {String} msg       占位符提示语文字
-		 * @param  {String} className 低版本浏览器占位符提示语样式名称，默认 tip-id，比如 id 为 name，那么样式名称为 'tip-name'
+		 * @param  {String} className ie 浏览器占位符样式，默认 tip-id，比如 id 为 name，那么样式名称为 'tip-name'
 		 */
 		placeholder: function(id, msg, className) {
 			var isPlaceholder = 'placeholder' in document.createElement('input'),
+				isIE = navigator.userAgent.indexOf('Trident') >= 0 ? true : false,
 				oTarget = document.getElementById(id),
 				oParent = oTarget.parentNode,
 				oLabel = document.createElement('label');
 
-			function dealPlaceholder(oTarget, oLabel) {
-				var deal = function() {
-					var val = oTarget.value;
-					if (val !== '') {
-						oLabel.style.display = 'none';
-					} else {
-						oLabel.style.display = 'block';
-					}
-				};
-				oTarget.oninput = oTarget.onpropertychange = deal;
-			}
-
-			if (isPlaceholder) {
+			if (isPlaceholder && !isIE) {
 				oTarget.setAttribute('placeholder', msg);
 			} else {
 				oLabel.setAttribute('for', id);
@@ -151,7 +141,9 @@
 				if (oTarget.value !== '') {
 					oLabel.style.display = 'none';
 				}
-				dealPlaceholder(oTarget, oLabel);
+				oTarget.oninput = oTarget.onpropertychange = function() {
+					oLabel.style.display = oTarget.value ? 'none' : 'block';
+				};
 			}
 		},
 		/**
@@ -159,25 +151,39 @@
 		 * @param {Object} obj 指代触发函数的上下文，一般用 this
 		 * @param {String} url 设置为首页的地址
 		 */
-		setHome: function(obj, url){
-			try{
+		setHome: function(obj, url) {
+			try {
 				obj.style.behavior = 'url(#default#homepage)';
 				obj.setHomePage(url);
-			}catch(e){
-				if(window.netscape){
-					try{
-						netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
-					}catch(error){
+			} catch (e) {
+				if (window.netscape) {
+					try {
+						window.netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+					} catch (error) {
 						alert('抱歉，此操作被浏览器拒绝！\n\n请在浏览器地址栏输入“about:config”并回车\n\n然后将[signed.applets.codebase_principal_support]的值设置为true，双击即可。');
 					}
 					var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch);
 					prefs.setCharPref('browser.startup.homepage', url);
-				}else{
+				} else {
 					alert('抱歉，您所使用的浏览器无法完成此操作。\n\n您需要手动将【' + url + '】设置为首页。');
 				}
+			}
+		},
+		/**
+		 * 获取 url 后的参数，使用方法：Utils.getUrlParam('name');
+		 * @param  {String} name 参数名称
+		 * @return {String}      有参数返回参数的值，没有返回 null
+		 */
+		getUrlParam: function(name) {
+			var regExp = new RegExp('([?]|&)' + name + '=([^&]*)(&|$)');
+			var result = window.location.href.match(regExp);
+			if (result) {
+				return decodeURIComponent(result[2]);
+			} else {
+				return null;
 			}
 		}
 	};
 
-	w.Utils = Utils;
+	window.Utils = Utils;
 })(window);

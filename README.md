@@ -22,3 +22,7 @@
 ## setHome ##
 
 设置为首页，使用方法：`<a href="javascript:;" onclick="Utils.setHome(this, window.location.href);">设为首页</a>`
+
+## getUrlParam ##
+
+获取 url 后的参数，使用方法：`Utils.getUrlParam('name');`
