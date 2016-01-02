@@ -1,4 +1,4 @@
-;(function(window) {
+;(function(window, document) {
 	'use strict';
 
 	var Utils = {
@@ -141,7 +141,7 @@
 				//在 ie6/7 中，setAttribute 设置 class 和 for 属性无效，需要设置 className 和 htmlFor 属性有效，所以此时 isSupportSetAttr 为 false，当然可以通过 oLabel.className 来设置 class，但是该方法对于 for 属性没用
 				isSupportSetAttr = oLabel.className === className;
 				//在 ie6/7 中，由于之前通过 setAttribute 已经设置过了 class 属性，后面设置 className 属性会在页面中重复 class 属性，虽然没有什么影响，但是以防万一还是先把之前设置的 class 属性删除
-				if(!isSupportSetAttr){
+				if (!isSupportSetAttr) {
 					oLabel.removeAttribute('class');
 					oLabel.setAttribute('className', className);
 				}
@@ -149,7 +149,7 @@
 				oLabel.innerHTML = msg;
 				oParent.insertBefore(oLabel, oTarget);
 				oLabel.style.display = oTarget.value ? 'none' : 'block';
-				oTarget.oninput = oTarget.onpropertychange = oTarget.onkeydown = oTarget.onkeyup = function(){
+				oTarget.oninput = oTarget.onpropertychange = oTarget.onkeydown = oTarget.onkeyup = function() {
 					oLabel.style.display = oTarget.value ? 'none' : 'block';
 				}
 			}
@@ -194,4 +194,4 @@
 	};
 
 	window.Utils = Utils;
-})(window);
+})(window, document);
