@@ -151,7 +151,7 @@
                 oLabel.style.display = oTarget.value ? 'none' : 'block';
                 oTarget.oninput = oTarget.onpropertychange = oTarget.onkeydown = oTarget.onkeyup = function() {
                     oLabel.style.display = oTarget.value ? 'none' : 'block';
-                }
+                };
             }
         },
         /**
