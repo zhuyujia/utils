@@ -35,7 +35,7 @@ target：字体改变的容器的 id
 由于 placeholder 在 ie 浏览器中效果不理想，比如 ie6-9 不支持 placeholder，ie10 鼠标聚焦后文本消失，所以在 ie 浏览器中使用 label 标签模拟。  
 @param  {String} id        文本输入框 id  
 @param  {String} msg       占位符提示语文字  
-@param  {String} className ie 浏览器占位符样式，默认 placeholder-tip
+@param  {String} tipClass  ie 浏览器占位符样式，默认 placeholder-tip
 
 ## setHome ##
 

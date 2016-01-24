@@ -123,27 +123,27 @@
          * 所以在 ie 浏览器中使用 label 标签模拟。
          * @param  {String} id        文本输入框 id
          * @param  {String} msg       占位符提示语文字
-         * @param  {String} className ie 浏览器占位符样式，默认 placeholder-tip
+         * @param  {String} tipClass  ie 浏览器占位符样式，默认 placeholder-tip
          */
-        placeholder: function(id, msg, className) {
+        placeholder: function(id, msg, tipClass) {
             var isPlaceholder = 'placeholder' in document.createElement('input'),
                 isIE = window.navigator.userAgent.indexOf('Trident') >= 0 ? true : false,
                 oTarget = document.getElementById(id),
                 oParent = oTarget.parentNode,
                 oLabel = document.createElement('label'),
-                className = className || 'placeholder-tip',
+                tipClass = tipClass || 'placeholder-tip',
                 isSupportSetAttr = true;
 
             if (isPlaceholder && !isIE) {
                 oTarget.setAttribute('placeholder', msg);
             } else {
-                oLabel.setAttribute('class', className);
+                oLabel.setAttribute('class', tipClass);
                 //在 ie6/7 中，setAttribute 设置 class 和 for 属性无效，需要设置 className 和 htmlFor 属性有效，所以此时 isSupportSetAttr 为 false，当然可以通过 oLabel.className 来设置 class，但是该方法对于 for 属性没用
-                isSupportSetAttr = oLabel.className === className;
+                isSupportSetAttr = oLabel.className === tipClass;
                 //在 ie6/7 中，由于之前通过 setAttribute 已经设置过了 class 属性，后面设置 className 属性会在页面中重复 class 属性，虽然没有什么影响，但是以防万一还是先把之前设置的 class 属性删除
                 if (!isSupportSetAttr) {
                     oLabel.removeAttribute('class');
-                    oLabel.setAttribute('className', className);
+                    oLabel.setAttribute('className', tipClass);
                 }
                 oLabel.setAttribute(isSupportSetAttr ? 'for' : 'htmlFor', id);
                 oLabel.innerHTML = msg;
