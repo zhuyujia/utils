@@ -127,7 +127,7 @@
          */
         placeholder: function(id, msg, className) {
             var isPlaceholder = 'placeholder' in document.createElement('input'),
-                isIE = navigator.userAgent.indexOf('Trident') >= 0 ? true : false,
+                isIE = window.navigator.userAgent.indexOf('Trident') >= 0 ? true : false,
                 oTarget = document.getElementById(id),
                 oParent = oTarget.parentNode,
                 oLabel = document.createElement('label'),
