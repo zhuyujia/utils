@@ -1,6 +1,5 @@
 ;(function(window, document) {
     'use strict';
-
     var zUtils = {
         /**
          * 用于读取/写入/删除浏览器 cookie。使用方法：
@@ -189,6 +188,35 @@
                 return decodeURIComponent(result[2]);
             } else {
                 return null;
+            }
+        },
+        /**
+         * 复制剪贴板功能，需要引入 ZeroClipboard.js，使用方法：zUtils.clipboard({txt: '复制内容', btn: 'btnId', parent: 'parentId', callback: function(){alert('复制成功');}});
+         * @param  {Object} opts 参数集合，参数如下：
+         * txt      需要复制的文本内容
+         * btn      需要绑定复制功能的元素 id
+         * parent   复制按钮（DOM 元素）所在的父层的 id，如果没有 id，默认为 body
+         * callback 复制成功后回调函数
+         */
+        clipboard: function(opts) {
+            if (window.clipboardData) {
+                var oBtn = document.getElementById(opts.btn);
+                oBtn.onclick = function() {
+                    window.clipboardData.setData('text', opts.txt);
+                    if (opts.callback) {
+                        opts.callback();
+                    }
+                }
+            } else {
+                var clip = new ZeroClipboard.Client();
+                clip.setHandCursor(true);
+                clip.setText(opts.txt);
+                clip.addEventListener('mouseUp', function() {
+                    if (opts.callback) {
+                        opts.callback();
+                    }
+                });
+                clip.glue(opts.btn, opts.parent);
             }
         }
     };
