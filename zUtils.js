@@ -47,12 +47,12 @@
          */
         addFavorite: function(obj, opts) {
             var _t, _u;
-            if (typeof opts !== 'object') {
-                _t = document.title;
-                _u = window.location.href;
-            } else {
+            if (typeof opts === 'object') {
                 _t = opts.title || document.title;
                 _u = opts.url || window.location.href;
+            } else {
+                _t = document.title;
+                _u = window.location.href;
             }
             try {
                 window.external.addFavorite(_u, _t);
