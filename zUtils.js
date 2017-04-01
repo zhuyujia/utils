@@ -33,7 +33,7 @@
                 if (document.cookie && document.cookie !== '') {
                     cookies = document.cookie.match(new RegExp('(^| )' + name + '=([^;]*)(;|$)'));
                     if (cookies) {
-                        return cookies[2];
+                        return decodeURIComponent(cookies[2]);
                     } else {
                         return null;
                     }
